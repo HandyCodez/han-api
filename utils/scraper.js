@@ -4,7 +4,8 @@ const tiktokdl = async (url) => {
     try {
         const browser = await puppeteer.launch({
             headless: true,
-            args: ['--no-sandbox'],
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            ignoreDefaultArgs: ['--disable-extensions']
         })
         const page = await browser.newPage()
         await page.goto('https://snaptik.app/ID')
