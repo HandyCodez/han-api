@@ -5,7 +5,7 @@ module.exports = async(app) => {
         const url = req.body.url
 
         try {
-            tiktokdl(url).then((result) => {
+            await tiktokdl(url).then((result) => {
                 res.json({
                     message: result,
                     status: true
