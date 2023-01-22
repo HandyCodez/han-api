@@ -18,17 +18,17 @@ const tiktokdl = async (url) => {
         });
 
         // IF FAILED
-        try {
-            await page.waitForSelector('#alert', {
-                delay: 300
-            })
-            let element = await page.$('#alert')
-            let value = await page.evaluate(el => el.textContent, element)
-            browser.close()
-            return value
-        } catch {
-            console.log('success')
-        }
+        // try {
+        //     await page.waitForSelector('#alert', {
+        //         delay: 300
+        //     })
+        //     let element = await page.$('#alert')
+        //     let value = await page.evaluate(el => el.textContent, element)
+        //     browser.close()
+        //     return value
+        // } catch {
+        //     console.log('success')
+        // }
 
         // GET DOWNLOAD LINK
         await page.waitForSelector("div.down-right", {
