@@ -11,21 +11,24 @@ const tiktokdl = async (url) => {
         await page.goto('https://snaptik.app/ID')
 
         // FILL INPUT WITH URL
-        await page.evaluate(val => document.querySelector('#url').value = val, url);
+        // await page.evaluate(val => document.querySelector('#url').value = val, url);
+        await page.type('#url', `${url}`)
         await page.click("button.btn-go", {
             delay: 300,
         });
 
         // IF FAILED
-        // try {
-        //     await page.waitForSelector('#alert')
-        //     let element = await page.$('#alert')
-        //     let value = await page.evaluate(el => el.textContent, element)
-        //     browser.close()
-        //     return value
-        // } catch {
-        //     // Does not
-        // }
+        try {
+            await page.waitForSelector('#alert', {
+                delay: 300
+            })
+            let element = await page.$('#alert')
+            let value = await page.evaluate(el => el.textContent, element)
+            browser.close()
+            return value
+        } catch {
+            // Does not
+        }
 
         // GET DOWNLOAD LINK
         await page.waitForSelector("div.down-right", {
