@@ -1,7 +1,7 @@
 const { tiktokdl } = require('../utils/scraper')
 
-module.exports = async(app) => {
-    app.post('/tiktokdl', function(req, res) {
+module.exports = async (app) => {
+    app.post('/tiktokdl', async (req, res) => {
         const url = req.body.url
 
         try {
@@ -11,6 +11,7 @@ module.exports = async(app) => {
                     status: true
                 })
             })
+
         } catch (error) {
             res.json({
                 message: error,

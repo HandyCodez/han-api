@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 const tiktokdl = async (url) => {
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         })
@@ -11,8 +11,8 @@ const tiktokdl = async (url) => {
         await page.goto('https://snaptik.app/ID')
 
         // FILL INPUT WITH URL
-        // await page.evaluate(val => document.querySelector('#url').value = val, url);
-        await page.type('#url', `${url}`)
+        await page.evaluate(val => document.querySelector('#url').value = val, url);
+        // await page.type('#url', `${url}`)
         await page.click("button.btn-go", {
             delay: 300,
         });
