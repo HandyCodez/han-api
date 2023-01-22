@@ -10,7 +10,7 @@ const tiktokdl = async (url) => {
         const page = await browser.newPage()
         await page.goto('https://snaptik.app/ID')
 
-        // FILL INPUT WITH URLL
+        // FILL INPUT WITH URL
         await page.evaluate(val => document.querySelector('#url').value = val, url);
         // await page.type('#url', `${url}`)
         await page.click("button.btn-go", {
@@ -27,7 +27,7 @@ const tiktokdl = async (url) => {
             browser.close()
             return value
         } catch {
-            // Does not
+            console.log('success')
         }
 
         // GET DOWNLOAD LINK
