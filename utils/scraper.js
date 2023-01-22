@@ -12,15 +12,17 @@ const tiktokdl = async (url) => {
 
         // FILL INPUT WITH URL
         await page.evaluate(val => document.querySelector('#url').value = val, url);
-        // await page.type("#url", `${url}`);
         await page.click("button.btn-go", {
             delay: 300,
         });
-
-        // if ((await page.waitForXPath('//*[contains(text(), "kesalahan')) !== null) {
-        //     browser.close()
-        //     return error
-        // }
+        
+        // IF FAILED
+        const failed = await page.$('#alert')
+        if(failed){
+            browser.close()
+            const message = "invalid url"
+            return message
+        }
 
         // GET DOWNLOAD LINK
         await page.waitForSelector("div.down-right", {
