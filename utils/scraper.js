@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 const tiktokdl = async (url) => {
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         })
@@ -17,15 +17,15 @@ const tiktokdl = async (url) => {
         });
 
         // IF FAILED
-        try {
-            await page.waitForSelector('#alert', {delay: 300})
-            let element = await page.$('#alert', {delay: 300})
-            let value = await page.evaluate(el => el.textContent, element)
-            browser.close()
-            return value
-        } catch {
-            // Does not
-        }
+        // try {
+        //     await page.waitForSelector('#alert')
+        //     let element = await page.$('#alert')
+        //     let value = await page.evaluate(el => el.textContent, element)
+        //     browser.close()
+        //     return value
+        // } catch {
+        //     // Does not
+        // }
 
         // GET DOWNLOAD LINK
         await page.waitForSelector("div.down-right", {
