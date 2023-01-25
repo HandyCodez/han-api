@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 const tiktokdl = async (url) => {
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         })
@@ -18,14 +18,18 @@ const tiktokdl = async (url) => {
         });
 
         // IF FAILED
-        function delay(time) {
-            return new Promise(function(resolve) { 
-                setTimeout(resolve, time)
-            });
-         }
-        delay(1000)      
-        const alert = await page.$eval('#alert', () => true).catch(() => false)
-        console.log(alert)
+        let alert = ""
+        function checkAlert() {
+            return new Promise((resolve) => {
+                setTimeout(async () => {
+                    alert = await page.$eval('#alert', () => true).catch(() => false)
+                    resolve(alert)
+                }, 1000)
+            })
+        }
+        await checkAlert().then((done) => {
+            console.log(done)
+        })
         if(alert == true){
             const element = await page.waitForSelector('#alert', {delay: 300});
             const exists = await element.evaluate(el => el.textContent);
