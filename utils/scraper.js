@@ -24,7 +24,7 @@ const tiktokdl = async (url) => {
                 setTimeout(async () => {
                     alert = await page.$eval('#alert', () => true).catch(() => false)
                     resolve(alert)
-                }, 1000)
+                }, 2000)
             })
         }
         await checkAlert().then((done) => {
