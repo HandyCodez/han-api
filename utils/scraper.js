@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 const tiktokdl = async (url) => {
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             ignoreDefaultArgs: ['--disable-extensions']
         })
@@ -18,29 +18,34 @@ const tiktokdl = async (url) => {
         });
 
         // IF FAILED
-        // try {
-        //     await page.waitForSelector('#alert', {
-        //         delay: 300
-        //     })
-        //     let element = await page.$('#alert')
-        //     let value = await page.evaluate(el => el.textContent, element)
-        //     browser.close()
-        //     return value
-        // } catch {
-        //     console.log('success')
-        // }
-
+        function delay(time) {
+            return new Promise(function(resolve) { 
+                setTimeout(resolve, time)
+            });
+         }
+        delay(1000)      
+        const alert = await page.$eval('#alert', () => true).catch(() => false)
+        console.log(alert)
+        if(alert == true){
+            const element = await page.waitForSelector('#alert', {delay: 300});
+            const exists = await element.evaluate(el => el.textContent);
+            browser.close()
+            return exists
+        }
+        
         // GET DOWNLOAD LINK
         await page.waitForSelector("div.down-right", {
             delay: 300,
         });
-        let link = await page.$eval("div.down-right > a", (element) => {
+        const link = await page.$eval("div.down-right > a", (element) => {
             return element.getAttribute("href");
         });
         await browser.close()
         return link
+
     } catch (error) {
         console.log(error)
+        browser.close()
         return error
     }
 }
