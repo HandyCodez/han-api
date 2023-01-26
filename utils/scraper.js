@@ -57,7 +57,7 @@ const tiktokdl = async (url) => {
 
 const igdl = async (url) => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         executablePath: executablePath(),
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         ignoreDefaultArgs: ['--disable-extensions']
