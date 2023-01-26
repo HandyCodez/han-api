@@ -6,7 +6,7 @@ const { executablePath } = require('puppeteer')
 
 const tiktokdl = async (url) => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         ignoreDefaultArgs: ['--disable-extensions']
     })
