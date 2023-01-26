@@ -1,12 +1,16 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer-extra')
+const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+puppeteer.use(StealthPlugin())
+
+const { executablePath } = require('puppeteer')
 
 const tiktokdl = async (url) => {
+    const browser = await puppeteer.launch({
+        headless: false,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        ignoreDefaultArgs: ['--disable-extensions']
+    })
     try {
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            ignoreDefaultArgs: ['--disable-extensions']
-        })
         const page = await browser.newPage()
         await page.goto('https://snaptik.app/ID')
 
@@ -26,11 +30,9 @@ const tiktokdl = async (url) => {
                 }, 2000)
             })
         }
-        await checkAlert().then((done) => {
-            console.log(done)
-        })
-        if(alert == true){
-            const element = await page.waitForSelector('#alert', {delay: 300});
+        await checkAlert()
+        if (alert == true) {
+            const element = await page.waitForSelector('#alert', { delay: 300 });
             const exists = await element.evaluate(el => el.textContent);
             browser.close()
             return exists
@@ -53,4 +55,62 @@ const tiktokdl = async (url) => {
     }
 }
 
-module.exports = { tiktokdl }
+const igdl = async (url) => {
+    const browser = await puppeteer.launch({
+        headless: false,
+        executablePath: executablePath(),
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        ignoreDefaultArgs: ['--disable-extensions']
+    })
+
+    try {
+        const page = await browser.newPage()
+        await page.goto('https://snapinsta.app/id')
+        await page.evaluate(val => document.querySelector('#url').value = val, url);
+
+        await page.click('#send')
+
+        let alert = ""
+        function checkAlert() {
+            return new Promise((resolve) => {
+                setTimeout(async () => {
+                    alert = await page.$eval('#alert', () => true).catch(() => false)
+                    resolve(alert)
+                }, 2000)
+            })
+        }
+        await checkAlert()
+        if (alert == true) {
+            const element = await page.waitForSelector('#alert', { delay: 300 });
+            const exists = await element.evaluate(el => el.textContent);
+            browser.close()
+            return exists
+        }
+
+        // GET
+        const hrefsCategoriesDeduped = new Set(await page.evaluate(
+            () => Array.from(
+                document.querySelectorAll('.download-box .abutton'),
+                a => a.href
+            )
+        ));
+
+        const hrefsPages = [];
+
+        for (const url of hrefsCategoriesDeduped){
+            hrefsPages.push(url)
+        }
+        browser.close()
+        return hrefsPages
+
+    } catch (error) {
+        browser.close()
+        console.log(error)
+        return error
+    }
+}
+
+module.exports = {
+    tiktokdl,
+    igdl
+}
