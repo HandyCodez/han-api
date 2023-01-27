@@ -89,20 +89,32 @@ const igdl = async (url) => {
         }
 
         // GET
-        const hrefsCategoriesDeduped = new Set(await page.evaluate(
+        const urls = new Set(await page.evaluate(
             () => Array.from(
                 document.querySelectorAll('.download-box .abutton'),
                 a => a.href
             )
         ));
+        const images = new Set(await page.evaluate(
+            () => Array.from(
+                document.querySelectorAll('.download-box img'),
+                a => a.src
+            )
+        ))
 
-        const hrefsPages = [];
+        const downloadUrl = []
+        const image = []
 
-        for (const url of hrefsCategoriesDeduped){
-            hrefsPages.push(url)
+        for (const data of urls){
+            downloadUrl.push(data)
         }
+        for (const data of images){
+            image.push(data)
+        }
+        
+        const final = {downloadUrl, image}
         browser.close()
-        return hrefsPages
+        return final
 
     } catch (error) {
         browser.close()
