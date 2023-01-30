@@ -3,13 +3,11 @@ const bodyParser = require("body-parser");
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT
-
-app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.sendFile('views/index.html', {root: __dirname })
+  res.send("hello world!")
 })
 
 // ROUTES WITH GLOB
