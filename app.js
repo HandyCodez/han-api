@@ -4,11 +4,12 @@ require('dotenv').config()
 const app = express()
 const port = process.env.PORT
 
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.sendFile('views/index.html', {root: __dirname })
 })
 
 // ROUTES WITH GLOB
